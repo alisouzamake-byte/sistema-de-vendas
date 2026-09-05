@@ -21,7 +21,19 @@ interface StoreValue extends Catalog {
 }
 
 const empty: Catalog = { categorias: [], insumos: [], receitas: [] }
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
+function isCatalog(value: unknown): value is Catalog {
+  if (!value || typeof value !== 'object') return false
+  const catalog = value as Partial<Catalog>
+  return Array.isArray(catalog.categorias) && Array.isArray(catalog.insumos) && Array.isArray(catalog.receitas)
+}
+
+const fetcher = async (url: string): Promise<Catalog> => {
+  const res = await fetch(url)
+  const payload: unknown = await res.json().catch(() => null)
+  if (!res.ok || !isCatalog(payload)) return empty
+  return payload
+}
 export function uid() { return crypto.randomUUID() }
 
 async function persist(action: string, data: unknown) {

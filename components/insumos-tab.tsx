@@ -10,7 +10,9 @@ import type { Insumo } from '@/lib/types'
 const vazio = { nome: '', valorUnitario: 0, pesoUnitario: 0, ondeCompra: '' }
 
 export function InsumosTab() {
-  const { insumos, addInsumo, updateInsumo, removeInsumo, receitas } = useStore()
+  const { insumos: catalogInsumos, addInsumo, updateInsumo, removeInsumo, receitas: catalogReceitas } = useStore()
+  const insumos = Array.isArray(catalogInsumos) ? catalogInsumos : []
+  const receitas = Array.isArray(catalogReceitas) ? catalogReceitas : []
   const [open, setOpen] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
   const [form, setForm] = useState<Omit<Insumo, 'id'>>(vazio)
