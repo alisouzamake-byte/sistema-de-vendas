@@ -346,15 +346,19 @@ export function VendaTab({
                 <tr className="border-b border-border text-left text-xs text-muted-foreground">
                   <th className="pb-2 font-medium">Ingrediente</th>
                   <th className="pb-2 text-right font-medium">Quantidade</th>
+                  <th className="pb-2 text-right font-medium">Peso total</th>
                 </tr>
               </thead>
               <tbody>
                 {resumo.ingredientes.map((i) => (
                   <tr key={i.insumoId} className="border-b border-border/50 last:border-0">
                     <td className="py-2">{i.nome}</td>
-                    <td className="py-2 text-right font-semibold text-foreground">
-                      {formatQty(i.quantidade)}
-                    </td>
+<td className="py-2 text-right font-semibold text-foreground">
+                        {formatQty(i.quantidade)}
+                      </td>
+                      <td className="py-2 text-right font-semibold text-foreground">
+                        {formatQty(i.pesoTotal)} KG
+                      </td>
                   </tr>
                 ))}
               </tbody>

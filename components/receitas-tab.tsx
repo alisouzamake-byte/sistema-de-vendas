@@ -310,7 +310,7 @@ export function ReceitasTab() {
                             tone={ex.margem >= 0 ? 'green' : 'pink'}
                           />
                           <Metric label="Rendimento" value={`${formatQty(r.rendimento)} un.`} />
-                          <Metric label="Peso do lote" value={`${formatQty(ex.pesoLote)}`} />
+                          <Metric label="Peso do lote" value={`${formatQty(ex.pesoLote)} KG`} />
                           <Metric
                             label="Faixa servidor"
                             value={`${formatMoney(r.precoMinServidor)} – ${formatMoney(r.precoMaxServidor)}`}

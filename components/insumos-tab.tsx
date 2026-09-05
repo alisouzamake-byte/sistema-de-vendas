@@ -81,7 +81,7 @@ export function InsumosTab() {
                 </p>
                 {i.pesoUnitario ? (
                   <p className="mt-0.5 text-xs text-muted-foreground">
-                    Peso unitário: <span className="text-foreground">{i.pesoUnitario}</span>
+                    Peso unitário: <span className="text-foreground">{i.pesoUnitario} KG</span>
                   </p>
                 ) : null}
                 {i.ondeCompra ? (

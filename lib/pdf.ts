@@ -82,11 +82,12 @@ export async function gerarRelatorioPDF(resumo: CartResumo) {
   autoTable(doc, {
     startY: y,
     margin: { left: margin, right: margin },
-    head: [['Produto', 'Qtd', 'Unit.', 'Total']],
+    head: [['Produto', 'Qtd', 'Preço und', 'Peso und', 'Total']],
     body: resumo.linhas.map((l) => [
       l.receita.nome,
       formatQty(l.quantidade),
       formatMoney(l.unit),
+      `${formatQty(l.receita.pesoUnitario)} KG`,
       formatMoney(l.total),
     ]),
     theme: 'grid',
@@ -95,9 +96,20 @@ export async function gerarRelatorioPDF(resumo: CartResumo) {
     alternateRowStyles: { fillColor: [252, 240, 246] },
     columnStyles: {
       1: { halign: 'center', cellWidth: 22 },
-      2: { halign: 'right', cellWidth: 30 },
-      3: { halign: 'right', cellWidth: 32 },
+      2: { halign: 'right', cellWidth: 28 },
+      3: { halign: 'right', cellWidth: 28 },
+      4: { halign: 'right', cellWidth: 32 },
     },
+  })
+  // @ts-expect-error lastAutoTable is added by the plugin
+  y = doc.lastAutoTable.finalY + 3
+  autoTable(doc, {
+    startY: y,
+    margin: { left: margin, right: margin },
+    body: [['Peso total dos produtos', `${formatQty(resumo.linhas.reduce((total, l) => total + l.receita.pesoUnitario * l.quantidade, 0))} KG`]],
+    theme: 'plain',
+    styles: { fontSize: 10, cellPadding: 2.2, textColor: INK, fontStyle: 'bold' },
+    columnStyles: { 0: { cellWidth: contentW * 0.7 }, 1: { halign: 'right' } },
   })
   // @ts-expect-error lastAutoTable is added by the plugin
   y = doc.lastAutoTable.finalY + 8
@@ -156,15 +168,25 @@ export async function gerarRelatorioPDF(resumo: CartResumo) {
   autoTable(doc, {
     startY: y,
     margin: { left: margin, right: margin },
-    head: [['Ingrediente', 'Quantidade']],
+    head: [['Ingrediente', 'Quantidade', 'Peso und']],
     body: resumo.ingredientes.length
-      ? resumo.ingredientes.map((i) => [i.nome, formatQty(i.quantidade)])
-      : [['Nenhum ingrediente cadastrado', '-']],
+      ? resumo.ingredientes.map((i) => [i.nome, formatQty(i.quantidade), `${formatQty(i.pesoUnitario)} KG`])
+      : [['Nenhum ingrediente cadastrado', '-', '-']],
     theme: 'grid',
     headStyles: { fillColor: BLUE, textColor: [15, 30, 45], fontStyle: 'bold' },
     bodyStyles: { textColor: INK, fontSize: 10 },
     alternateRowStyles: { fillColor: [235, 247, 253] },
-    columnStyles: { 1: { halign: 'right', cellWidth: 40 } },
+    columnStyles: { 1: { halign: 'right', cellWidth: 34 }, 2: { halign: 'right', cellWidth: 34 } },
+  })
+  // @ts-expect-error lastAutoTable is added by the plugin
+  y = doc.lastAutoTable.finalY + 3
+  autoTable(doc, {
+    startY: y,
+    margin: { left: margin, right: margin },
+    body: [['Peso total dos ingredientes', `${formatQty(resumo.ingredientes.reduce((total, i) => total + i.pesoTotal, 0))} KG`]],
+    theme: 'plain',
+    styles: { fontSize: 10, cellPadding: 2.2, textColor: INK, fontStyle: 'bold' },
+    columnStyles: { 0: { cellWidth: contentW * 0.7 }, 1: { halign: 'right' } },
   })
   // @ts-expect-error lastAutoTable is added by the plugin
   y = doc.lastAutoTable.finalY + 12

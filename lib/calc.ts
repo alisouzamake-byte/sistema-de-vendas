@@ -117,7 +117,7 @@ export function calcularCarrinho(
       const insumo = insumos.find((i) => i.id === ing.insumoId)
       const nome = insumo ? insumo.nome : 'Insumo removido'
       const pesoUnitario = insumo?.pesoUnitario ?? 0
-      const qtd = ing.quantidade * l.quantidade
+      const qtd = Math.trunc(ing.quantidade) * Math.trunc(l.quantidade)
       const existente = mapa.get(ing.insumoId)
       if (existente) {
         existente.quantidade += qtd

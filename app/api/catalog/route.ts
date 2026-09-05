@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     if (action === 'supply.delete') await db.delete(supplies).where(eq(supplies.id, body.data.id))
     if (action === 'recipe.create' || action === 'recipe.update') {
       const d = body.data
-      const recipe = { id: d.id, name: d.nome, categoryId: d.categoriaId, salePrice: String(Number(d.precoAtual) || 0), yieldQuantity: integer(d.rendimento, 1), unitWeight: numberOrNull(d.pesoUnitario)?.toString() ?? null, serverMin: numberOrNull(d.faixaServidorMin)?.toString() ?? null, serverMax: numberOrNull(d.faixaServidorMax)?.toString() ?? null }
+      const recipe = { id: d.id, name: d.nome, categoryId: d.categoriaId, salePrice: String(Number(d.precoAtual) || 0), yieldQuantity: integer(d.rendimento, 1), unitWeight: numberOrNull(d.pesoUnitario)?.toString() ?? null, serverMin: numberOrNull(d.precoMinServidor)?.toString() ?? null, serverMax: numberOrNull(d.precoMaxServidor)?.toString() ?? null }
       if (action.endsWith('create')) await db.insert(recipes).values(recipe)
       else await db.update(recipes).set(recipe).where(eq(recipes.id, recipe.id))
       await db.delete(recipeIngredients).where(eq(recipeIngredients.recipeId, recipe.id))
